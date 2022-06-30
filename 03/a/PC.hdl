@@ -16,5 +16,10 @@ CHIP PC {
     OUT out[16];
 
     PARTS:
-    // Put your code here:
+    // Put your code here: 202206 bsh
+    Inc16(in=outRes, out=outUp);
+    Mux16(a=outRes, b=outUp, sel=inc, out= outInc);
+    Mux16(a=outInc, b=in, sel=load, out= outLoad);
+    Mux16(a=outLoad, b=false, sel=reset, out= outReset);
+    Register(in=outReset, load=true, out=outRes, out=out);     
 }
