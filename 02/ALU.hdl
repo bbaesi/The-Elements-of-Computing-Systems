@@ -42,15 +42,28 @@ CHIP ALU {
         ng; // 1 if (out < 0),  0 otherwise
 
     PARTS:
-   // Put you code here:
-    Mux16(a=x, b[0..15]=false, sel=zx, out=zX);
-    Mux16(a=y, b[0..15]=false, sel=zy, out=zY);
+   // Put you code here: 202206 bsh
+    Mux16(a=x, b[0..15]=false, sel=zx, out=zX); // zx x 0으로
+    Mux16(a=y, b[0..15]=false, sel=zy, out=zY); // zy y 0으로
     
-    Not16(in=zX, out=nZX);
-    Not16(in=zY, out=nZY);
+    Not16(in=zX, out=nZX); // x 반전
+    Not16(in=zY, out=nZY); // y 반전
 
-    Mux16(a=zX, b=nZX, sel=nx, out=nX);
-    Mux16(a=zY, b=nZY, sel=ny, out=nY);
-    
-    
+    Mux16(a=zX, b=nZX, sel=nx, out=nX); // nx sel이 true면 대체
+    Mux16(a=zY, b=nZY, sel=ny, out=nY); // ny sel이 true 대체
+
+    And16(a=nX, b=nY, out=andNxy); // f and와 add 구현
+    Add16(a=nX, b=nY,out=addNxy);
+    Mux16(a=andNxy, b=addNxy, sel=f, out=fout);
+
+    Not16(in=fout, out=nfout); //no에 의한 역전
+    Mux16(a=fout, b=nfout, sel=no, out[0..7]=front, out[8..15]=back, out[15]=ng, out=out);
+    //out을 여러가지로 쪼개서 받을 수 있음.
+
+    Or8Way(in=front, out=fCheck); // 0 체크
+    Or8Way(in=back, out=bCheck);
+    Or(a=fCheck, b=bCheck, out=zCheck);
+    Mux(a=true, b=false, sel=zCheck, out=zr);
+
+
 }
