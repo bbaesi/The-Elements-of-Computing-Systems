@@ -1,7 +1,7 @@
 # The-Elements-of-Computing-Systems
 밑바닥부터 만드는 컴퓨팅 시스템
 
-1장 불 논리
+1장 불 논리 \n
 2장 불 연산
 3장 순차 논리
 4장 기계어
