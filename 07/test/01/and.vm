@@ -1,0 +1,4 @@
+push constant 57
+push constant 31
+push constant 23
+and
