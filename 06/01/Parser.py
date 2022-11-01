@@ -21,7 +21,7 @@ class Parser:
     def advance(self):
         self.line += 1
         self.instructions[self.line] = self.instructions[self.line].split('//')[0].replace('\n','').replace(' ', '')
-        #공백 줄 처리 따로 안하면 list[][] 원소 호출 과정에서 IndexError 발생 한다.
+        # 공백 줄 처리 따로 안하면 list[][] 원소 호출 과정에서 IndexError 발생 한다.
         while self.hasMoreCommands() and self.instructions[self.line] == "":
             self.line+=1
             self.instructions[self.line] = self.instructions[self.line].split('//')[0].replace('\n','').replace(' ', '')

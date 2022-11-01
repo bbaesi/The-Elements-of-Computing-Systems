@@ -32,18 +32,21 @@ def main():
     #두번째 파싱
     while second_parser.hasMoreCommands():
         second_parser.advance()
+        # A 명령어일 경우
         if second_parser.commandType() == "A_COMMAND" : 
             symbol = second_parser.symbol()
             if symbol.isdigit():
                 A_COMMAND = bin(int(second_parser.symbol()))[2:]
             else:
+                # 기호 유무 파악해 없으면 딕셔너리에 저장한다.
                 if not symbolTable.contains(symbol):
                     symbolTable.addEntry(symbol,new_address)
-                    new_address += 1      
+                    new_address += 1
+                # 기호 주소 반환      
                 address = symbolTable.getAddress(symbol)
                 A_COMMAND = bin(int(address))[2:]
             COMMAND = A_COMMAND.zfill(16)
-
+        # C 명령어일 경우
         if second_parser.commandType() == "C_COMMAND" :
             comp = code.comp(second_parser.comp())
             dest = code.dest(second_parser.dest()) 

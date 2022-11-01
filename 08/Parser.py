@@ -33,7 +33,19 @@ class Parser:
             if command in 'push' :
                 return 'C_PUSH'        
             elif command in 'pop' :
-                return 'C_POP'            
+                return 'C_POP'
+            elif command in 'label' :
+                return 'C_LABEL'
+            elif command in 'goto' :
+                return 'C_GOTO'
+            elif command in 'if' :
+                return 'C_IF'
+            elif command in 'function' :
+                return 'C_FUNCTION'                 
+            elif command in 'return' :
+                return 'C_RETURN'                                                
+            elif command in 'call' :
+                return 'C_CALL'              
             return 'C_ARITHMETIC'   
 
     # 첫번째 인수 반환
@@ -46,5 +58,5 @@ class Parser:
     
     # 두번째 인수 반환
     def arg2(self):
-        if self.commandType() == "C_PUSH" or self.commandType() == "C_POP" :
+        if self.commandType() == "C_PUSH" or self.commandType() == "C_POP" or  self.commandType() == "C_FUNCTION" or self.commandType() == "C_CALL" :
             return self.instructions[self.line].split(' ')[2]
