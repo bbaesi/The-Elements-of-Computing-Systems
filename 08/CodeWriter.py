@@ -1,11 +1,20 @@
+import os
+
 class CodeWriter:
 
     # ** CodeWriter 기록 준비 ** #
     def __init__(self, path):
         self.path = path
-        self.file = self.path.split('.vm')[0]
-        self.filename = self.file.split('/')[-1]
-        self.output_file = open(self.file+ '.asm','w')   
+
+        file = self.path.split('.vm')[0]
+        self.fileName = file.split('/')[-1]
+
+        self.dir= self.path.split('/'+ self.fileName+'.vm')[0]
+        self.dirName = self.dir.split('/')[-1]
+
+        output = self.dir+ '/' + self.dirName + '.asm'
+        self.output_file = open(output + '.asm','a')   
+
         self.line = -1 
         self.LABEL = { }
         self.functionName = ""
@@ -130,7 +139,7 @@ class CodeWriter:
                 self.output_file.writelines("D=M\n")
                 self.line += 2  
             elif segment == "static" :
-                self.output_file.writelines("@%s.static%s\n" % (self.filename, index))  
+                self.output_file.writelines("@%s.static%s\n" % (self.fileName, index))  
                 self.output_file.writelines("D=M\n")
                 self.line += 2                  
             # 아래 segment는 함수 세팅 값에 따라 초기값이 달라 질 수 있기 때문에 숫자로 하드 코딩 x                                         
@@ -193,7 +202,7 @@ class CodeWriter:
                 self.output_file.writelines("@SP\n")                     
                 self.output_file.writelines("AM=M-1\n")             
                 self.output_file.writelines("D=M\n")                   
-                self.output_file.writelines("@%s.static%s\n" % (self.filename, index))                 
+                self.output_file.writelines("@%s.static%s\n" % (self.fileName, index))                 
                 self.output_file.writelines("M=D\n")   
                 self.output_file.writelines("@SP\n") 
                 self.output_file.writelines("A=M\n\n")    
@@ -212,12 +221,12 @@ class CodeWriter:
                     self.output_file.writelines("@THAT\n")                
                 # POP 실행    
                 self.output_file.writelines("D=D+M\n")    
-                self.output_file.writelines("@%s.tmp\n" % self.filename)     
+                self.output_file.writelines("@%s.tmp\n" % self.fileName)     
                 self.output_file.writelines("M=D\n")
                 self.output_file.writelines("@SP\n")                     
                 self.output_file.writelines("AM=M-1\n")             
                 self.output_file.writelines("D=M\n")                    
-                self.output_file.writelines("@%s.tmp\n" % self.filename)     
+                self.output_file.writelines("@%s.tmp\n" % self.fileName)     
                 self.output_file.writelines("A=M\n")     
                 self.output_file.writelines("M=D\n")  
                 self.output_file.writelines("@SP\n") 
@@ -338,12 +347,12 @@ class CodeWriter:
         self.output_file.writelines("@ARG\n")               
         self.output_file.writelines("A=M+D\n")              
         self.line += 4
-        # numLocals의 수 만큼 변수 초기화 #
-        for i in range(0, num) :                   
+        # numLocals의 수 만큼 변수 초기화 #:
+        for i in range(0, num)  :                   
             self.output_file.writelines("A=A+1\n")              
             self.output_file.writelines("M=0\n")          
             self.line += 2
-        self.output_file.writelines("@%s\n" % str(i+1))
+        self.output_file.writelines("@%s\n" % str(num+1))
         self.output_file.writelines("D=A\n")         
         self.output_file.writelines("@SP\n")                     
         self.output_file.writelines("AM=M+D\n")   
