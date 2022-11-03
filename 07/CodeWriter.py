@@ -171,7 +171,8 @@ class CodeWriter:
             self.output_file.writelines("AM=M-1\n")             
             self.output_file.writelines("D=M\n")               
             if segment == "constant" :             
-                self.line += 0           
+                self.output_file.writelines("@%s\n" % str(num+256))   
+                self.output_file.writelines("M=D\n")             
             elif segment == "local" :        
                 self.output_file.writelines("@%s\n" % str(num+300))   
                 self.output_file.writelines("M=D\n")                 

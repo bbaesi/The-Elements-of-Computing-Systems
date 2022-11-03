@@ -34,6 +34,6 @@ class SymbolTable:
     def contains(self, symbol):
         return symbol in self.symbolsTable
     
-    # (symbol, address 쌍을 추가)
+    # address 리턴
     def getAddress(self, symbol):
         return self.symbolsTable[symbol]

@@ -38,7 +38,7 @@ class Parser:
                 return 'C_LABEL'
             elif command in 'goto' :
                 return 'C_GOTO'
-            elif command in 'if' :
+            elif command in 'if-goto' :
                 return 'C_IF'
             elif command in 'function' :
                 return 'C_FUNCTION'                 
@@ -53,6 +53,9 @@ class Parser:
         if self.commandType() != "C_RETURN" :
             if self.commandType() == "C_ARITHMETIC" :
                 return self.instructions[self.line].split(' ')[0]
+            elif self.commandType() == "C_FUNCTION" : 
+                arg1 = self.instructions[self.line].split(' ')[1]
+                return arg1.split('.')[1]
             else :
                 return self.instructions[self.line].split(' ')[1]
     
