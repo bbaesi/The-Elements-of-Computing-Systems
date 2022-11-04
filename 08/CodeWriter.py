@@ -13,7 +13,11 @@ class CodeWriter:
         self.dirName = self.dir.split('/')[-1]
 
         output = self.dir+ '/' + self.dirName + '.asm'
-        self.output_file = open(output + '.asm','a')   
+        
+        if self.path.split('/')[-1] == "Sys.vm"  and os.path.isfile(output):
+            print("    - Delete existing files") 
+            os.remove(output)        
+        self.output_file = open(output,'a')   
 
         self.line = -1 
         self.LABEL = { }
@@ -270,8 +274,69 @@ class CodeWriter:
         self.line += 14
 
     # ** call 명령어 수행 ** #
+    # push 받은 인수
+    # return 후 복귀할 명령어 위치 스택에 저장
+    # 호출 전 LCL, ARG, THIS, THAT, 위치 스택에 저장
+    # R2(ARG): 인수 주소 
+    # R1(LCL): 스택에 저장한 세그먼트 바로 다음 주소
     def writeCall(self, functionName, numArgs):
-        return 0
+        num = int(numArgs)
+        callName=  functionName.split('.')[1]
+
+        # 명령어 위치 계산
+        self.output_file.writelines("@%d\n" % (47+self.line))                     
+        self.output_file.writelines("D=A\n")                     
+        self.output_file.writelines("@SP\n")                     
+        self.output_file.writelines("A=M\n")                     
+        self.output_file.writelines("M=D\n")
+        self.output_file.writelines("@SP\n")                     
+        self.output_file.writelines("AM=M+1\n")
+        # LCL 스택에 저장
+        self.output_file.writelines("@LCL\n")                     
+        self.output_file.writelines("D=M\n")
+        self.output_file.writelines("@SP\n")                     
+        self.output_file.writelines("A=M\n")                     
+        self.output_file.writelines("M=D\n")
+        self.output_file.writelines("@SP\n")                     
+        self.output_file.writelines("AM=M+1\n")        
+        # ARG 스택에 저장
+        self.output_file.writelines("@ARG\n")                     
+        self.output_file.writelines("D=M\n")
+        self.output_file.writelines("@SP\n")                     
+        self.output_file.writelines("A=M\n")                     
+        self.output_file.writelines("M=D\n")
+        self.output_file.writelines("@SP\n")                     
+        self.output_file.writelines("AM=M+1\n")      
+        # THIS 스택에 저장
+        self.output_file.writelines("@THIS\n")                     
+        self.output_file.writelines("D=M\n")
+        self.output_file.writelines("@SP\n")                     
+        self.output_file.writelines("A=M\n")                     
+        self.output_file.writelines("M=D\n")
+        self.output_file.writelines("@SP\n")                     
+        self.output_file.writelines("AM=M+1\n")  
+        # THAT 스택에 저장
+        self.output_file.writelines("@THAT\n")                     
+        self.output_file.writelines("D=M\n")
+        self.output_file.writelines("@SP\n")                     
+        self.output_file.writelines("A=M\n")                     
+        self.output_file.writelines("M=D\n")
+        self.output_file.writelines("@SP\n")                     
+        self.output_file.writelines("AM=M+1\n")      
+        # R2에 function 시작 위치 저장
+        self.output_file.writelines("D=A\n")
+        self.output_file.writelines("@LCL\n")  
+        self.output_file.writelines("M=D\n")
+        # R1에 return 시작 위치 저장
+        self.output_file.writelines("@%s\n" % str(num+5))                     
+        self.output_file.writelines("D=A\n")
+        self.output_file.writelines("@SP\n")    
+        self.output_file.writelines("D=M-D\n") 
+        self.output_file.writelines("@ARG\n")
+        self.output_file.writelines("M=D\n")
+        self.output_file.writelines("@%s\n" % callName) 
+        self.output_file.writelines("0;JMP\n")   
+        self.line += 46
 
     # ** return 명령어 수행 ** #
     def writeReturn(self):
@@ -342,11 +407,9 @@ class CodeWriter:
         num = int(numLocals)
         self.functionName = functionName
         self.output_file.writelines("(%s)\n" % self.functionName) 
-        self.output_file.writelines("@%s\n" % str(6))  
-        self.output_file.writelines("D=A\n")     
         self.output_file.writelines("@ARG\n")               
         self.output_file.writelines("A=M+D\n")              
-        self.line += 4
+        self.line += 2
         # numLocals의 수 만큼 변수 초기화 #:
         for i in range(0, num)  :                   
             self.output_file.writelines("A=A+1\n")              
@@ -355,11 +418,10 @@ class CodeWriter:
         self.output_file.writelines("@%s\n" % str(num+1))
         self.output_file.writelines("D=A\n")         
         self.output_file.writelines("@SP\n")                     
-        self.output_file.writelines("AM=M+D\n")   
+        self.output_file.writelines("AM=M+D\n\n")   
         self.line += 4
 
     def setLabel(self, LABEL):
-        print(LABEL)
         self.LABEL = LABEL
 
     # ** 파일 닫기 ** #

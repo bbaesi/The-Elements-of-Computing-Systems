@@ -10,14 +10,16 @@ def main():
     file_list_vm = [file for file in file_list if file.endswith(".vm")]
     file_list_vm.remove("Sys.vm")
     file_list_vm.insert(0, 'Sys.vm')
-    print ("========== compile set ==========")
-    print ("file_list: {} ".format(file_list_vm))
+    print ("========== compile set ===========")
+    print ("    - file_list: {} ".format(file_list_vm))
     
     line = -1
     
     for i in file_list_vm :
         file = sys.argv[1]+"/"+i
-        print ("compile start : {} ".format(i))
+        print ("========= compile start ==========".format(i))
+        print ("    - {} is ready ".format(i))
+
         first_parser = Parser.Parser(file)
         second_parser = Parser.Parser(file)
         write = CodeWriter.CodeWriter(file)
@@ -69,6 +71,7 @@ def main():
                 line += (8 + 2 * int(first_parser.arg2()))
             # print(write.line)
         write.setLabel(LABEL)
+        print("    - label : " +str(LABEL))
 
 
         # hack 파일
@@ -90,8 +93,8 @@ def main():
             elif second_parser.commandType() == "C_IF" :
                 write.writeIf(second_parser.arg1())
             # 함수 호출 명령 처리
-            # elif second_parser.commandType() == "C_CALL" :
-            #     write.writeCall(second_parser.arg1())
+            elif second_parser.commandType() == "C_CALL" :
+                write.writeCall(second_parser.arg1(),second_parser.arg2())     
             # 호출 반환 명령 처리
             elif second_parser.commandType() == "C_RETURN" :
                 write.writeReturn()      
@@ -100,7 +103,7 @@ def main():
                 write.writeFunction(second_parser.arg1(),second_parser.arg2())                                                                  
         # 파일 닫기    
         write.close()
-    print ("========== compile success ==========")
+    print ("======== compile success =========")
 
 if __name__ == "__main__":
     main()
