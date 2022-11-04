@@ -28,7 +28,8 @@ class CodeWriter:
         # 스택 포인터 재지정
         self.output_file.writelines("@SP\n")
         self.output_file.writelines("AM=M-1\n")  
-        self.line += 2               
+        self.output_file.writelines("D=M\n")        
+        self.line += 3               
         # 산술 명령 번역 시작  
         if command == "add" :              
             self.output_file.writelines("D=M\n")   
@@ -47,14 +48,16 @@ class CodeWriter:
             self.line += 1
         elif command == "eq" : 
             # 조건문 점프 
+            self.output_file.writelines("@SP\n")
+            self.output_file.writelines("AM=M-1\n")             
             self.output_file.writelines("D=M-D\n") 
-            self.output_file.writelines("@%s\n" % str(self.line + 2 + 4)) 
+            self.output_file.writelines("@%s\n" % str(self.line + 4 + 4)) 
             self.output_file.writelines("D;JEQ\n")   
-            self.output_file.writelines("@%s\n" % str(self.line + 4 + 5)) 
+            self.output_file.writelines("@%s\n" % str(self.line + 6 + 5)) 
             self.output_file.writelines("D;JNE\n")
             # 같을 경우 
             self.output_file.writelines("D=-1\n")            
-            self.output_file.writelines("@%s\n" % str(self.line + 7 + 3)) 
+            self.output_file.writelines("@%s\n" % str(self.line + 9 + 3)) 
             self.output_file.writelines("0;JMP\n")   
             # 다를 경우 
             self.output_file.writelines("D=0\n")  
@@ -62,17 +65,19 @@ class CodeWriter:
             self.output_file.writelines("@SP\n")
             self.output_file.writelines("A=M\n")
             self.output_file.writelines("M=D\n")  
-            self.line += 12
+            self.line += 14
         elif command == "gt" : 
             # 조건문 점프 
+            self.output_file.writelines("@SP\n")
+            self.output_file.writelines("AM=M-1\n")             
             self.output_file.writelines("D=M-D\n") 
-            self.output_file.writelines("@%s\n" % str(self.line + 2 + 4)) 
+            self.output_file.writelines("@%s\n" % str(self.line + 4 + 4)) 
             self.output_file.writelines("D;JGT\n")   
-            self.output_file.writelines("@%s\n" % str(self.line + 4 + 5)) 
+            self.output_file.writelines("@%s\n" % str(self.line + 6 + 5)) 
             self.output_file.writelines("D;JLE\n")       
             # 클 경우 
             self.output_file.writelines("D=-1\n")            
-            self.output_file.writelines("@%s\n" % str(self.line + 7 + 3)) 
+            self.output_file.writelines("@%s\n" % str(self.line + 9 + 3)) 
             self.output_file.writelines("0;JMP\n")   
             # 같을 경우 + 작을 경우 
             self.output_file.writelines("D=0\n")
@@ -80,17 +85,19 @@ class CodeWriter:
             self.output_file.writelines("@SP\n")
             self.output_file.writelines("A=M\n")            
             self.output_file.writelines("M=D\n")  
-            self.line += 12
+            self.line += 14
         elif command == "lt" : 
             # 조건문 점프 
+            self.output_file.writelines("@SP\n")
+            self.output_file.writelines("AM=M-1\n")             
             self.output_file.writelines("D=M-D\n") 
-            self.output_file.writelines("@%s\n" % str(self.line + 2 + 4)) 
+            self.output_file.writelines("@%s\n" % str(self.line + 4 + 4)) 
             self.output_file.writelines("D;JLT\n")   
-            self.output_file.writelines("@%s\n" % str(self.line + 4 + 5)) 
+            self.output_file.writelines("@%s\n" % str(self.line + 6 + 5)) 
             self.output_file.writelines("D;JGE\n")       
             # 클 경우 
             self.output_file.writelines("D=-1\n")            
-            self.output_file.writelines("@%s\n" % str(self.line + 7 + 3)) 
+            self.output_file.writelines("@%s\n" % str(self.line + 9 + 3)) 
             self.output_file.writelines("0;JMP\n")   
             # 같을 경우 + 작을 경우 
             self.output_file.writelines("D=0\n")
@@ -98,7 +105,7 @@ class CodeWriter:
             self.output_file.writelines("@SP\n")
             self.output_file.writelines("A=M\n")            
             self.output_file.writelines("M=D\n")  
-            self.line += 12          
+            self.line += 14          
         elif command == "and" :         
             self.output_file.writelines("D=M\n")   
             self.output_file.writelines("@SP\n")
@@ -397,7 +404,7 @@ class CodeWriter:
         self.output_file.writelines("M=D\n")                          
         # SP 조정 #
         self.output_file.writelines("@SP\n")                     
-        self.output_file.writelines("AM=M+1\n")   
+        self.output_file.writelines("AM=M+1\n\n")   
         self.line += 50
 
 

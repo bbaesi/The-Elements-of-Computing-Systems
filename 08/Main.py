@@ -27,6 +27,7 @@ def main():
         LABEL = { }
         write.line = line        
 
+
         # label 시점 계산
         while first_parser.hasMoreCommands():
             first_parser.advance()
@@ -46,7 +47,7 @@ def main():
             # 산술 명령 계산   
             elif first_parser.commandType() == "C_ARITHMETIC" :
                 if (command in "eq") or (command in "gt") or (command in "lt"):  
-                    line += 16
+                    line += 19
                 elif (command in "not") or (command in "neg"):  
                     line += 5                     
                 else :
@@ -61,8 +62,8 @@ def main():
             elif first_parser.commandType() == "C_IF" :
                 line += 14                   
             # 함수 호출 명령 계산
-            # elif first_parser.commandType() == "C_CALL" :
-            #     write.writeCall(first_parser.arg1())
+            elif first_parser.commandType() == "C_CALL" :
+                line += 46                   
             # 호출 반환 명령 처리
             elif first_parser.commandType() == "C_RETURN" :
                 line += 50
