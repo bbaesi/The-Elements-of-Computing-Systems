@@ -342,7 +342,7 @@ class CodeWriter:
         self.output_file.writelines("@ARG\n")
         self.output_file.writelines("M=D\n")
         self.output_file.writelines("@%s\n" % callName) 
-        self.output_file.writelines("0;JMP\n")   
+        self.output_file.writelines("0;JMP\n\n")   
         self.line += 46
 
     # ** return 명령어 수행 ** #
@@ -422,7 +422,7 @@ class CodeWriter:
             self.output_file.writelines("A=A+1\n")              
             self.output_file.writelines("M=0\n")          
             self.line += 2
-        self.output_file.writelines("@%s\n" % str(num+1))
+        self.output_file.writelines("@%s\n" % str(num))
         self.output_file.writelines("D=A\n")         
         self.output_file.writelines("@SP\n")                     
         self.output_file.writelines("AM=M+D\n\n")   

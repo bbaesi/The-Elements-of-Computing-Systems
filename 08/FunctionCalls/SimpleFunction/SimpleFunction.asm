@@ -1,6 +1,4 @@
 (test)
-@6
-D=A
 @ARG
 A=M+D
 A=A+1
@@ -11,6 +9,7 @@ M=0
 D=A
 @SP
 AM=M+D
+
 @0
 D=A
 @LCL
@@ -36,6 +35,7 @@ M=M+1
 @SP
 AM=M-1
 D=M
+D=M
 @SP
 AM=M-1
 M=M+D
@@ -44,6 +44,7 @@ AM=M+1
 
 @SP
 AM=M-1
+D=M
 M=!M
 @SP
 AM=M+1
@@ -62,6 +63,7 @@ M=M+1
 @SP
 AM=M-1
 D=M
+D=M
 @SP
 AM=M-1
 M=M+D
@@ -81,6 +83,7 @@ M=M+1
 
 @SP
 AM=M-1
+D=M
 D=M
 @SP
 AM=M-1
@@ -138,3 +141,4 @@ D=M
 M=D
 @SP
 AM=M+1
+

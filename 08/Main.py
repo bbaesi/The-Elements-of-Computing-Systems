@@ -8,8 +8,9 @@ def main():
     path = sys.argv[1]
     file_list = os.listdir(path)
     file_list_vm = [file for file in file_list if file.endswith(".vm")]
-    file_list_vm.remove("Sys.vm")
-    file_list_vm.insert(0, 'Sys.vm')
+    if "Sys.vm" in file_list_vm:
+        file_list_vm.remove("Sys.vm")
+        file_list_vm.insert(0, 'Sys.vm')
     print ("========== compile set ===========")
     print ("    - file_list: {} ".format(file_list_vm))
     
